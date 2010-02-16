@@ -1,0 +1,9 @@
+$ gem install should_be_faster
+
+describe Benchmarkable do
+  it 'should be faster than the old crap code' do
+    old = lambda { 100.times.map { rand } }
+    new = lambda { true }
+    old.should be_at_least(10).times.slower_than(new)
+  end
+end
