@@ -78,12 +78,14 @@ module Spec
 
     class BePredicate < Be
       def times
+        @factor = @args[0]
         self
       end
 
       def faster_than(rhs_code, options={})
+        options ||= {}
+        options[:factor] = @factor
         Matcher.new(:faster_than) do
-          options ||= {}
           options[:faster]  = true
           options[:matcher] = self
           Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
@@ -91,8 +93,9 @@ module Spec
       end
 
       def slower_than(rhs_code, options={})
+        options ||= {}
+        options[:factor] = @factor
         Matcher.new(:slower_than) do
-          options ||= {}
           options[:faster]  = false
           options[:matcher] = self
           Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
