@@ -14,7 +14,7 @@ Jeweler::Tasks.new do |gemspec|
   gemspec.name         = 'should_be_faster'
   gemspec.summary      = 'provides rspec matcher to do simple benchmark tests'
   gemspec.email        = 'dsturnbull@gmail.com'
-  gemspec.version      = '0.0.2'
+  gemspec.version      = '0.0.3'
   gemspec.authors      = ['David Turnbull']
   gemspec.homepage     = 'http://github.com/dsturnbull/should_be_faster'
   gemspec.files        = ['lib/should_be_faster.rb']
