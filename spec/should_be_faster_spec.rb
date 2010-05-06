@@ -44,6 +44,8 @@ describe 'should_be_faster' do
         @fast.should be_faster_than(@slow, :factor => 2)
       end
 
+      it 'should ensure lhs  < rhs by y secs'
+
       it 'should ensure lhs !> rhs' do
         @slow.should_not be_faster_than(@fast)
       end
@@ -51,6 +53,8 @@ describe 'should_be_faster' do
       it 'should ensure lhs !> rhs by x times' do
         @slow.should_not be_faster_than(@fast, :factor => 2)
       end
+
+      it 'should ensure lhs !> rhs by y secs'
     end
 
     context 'slower_than' do
@@ -62,6 +66,8 @@ describe 'should_be_faster' do
         @slow.should be_slower_than(@fast, :factor => 2)
       end
 
+      it 'should ensure lhs  > rhs by y secs'
+
       it 'should ensure lhs !< rhs' do
         @fast.should_not be_slower_than(@slow)
       end
@@ -69,6 +75,8 @@ describe 'should_be_faster' do
       it 'should ensure lhs !< rhs by x times' do
         @fast.should_not be_slower_than(@slow, :factor => 2)
       end
+
+      it 'should ensure lhs !< rhs by y secs'
     end
 
     context 'at_least(x).times.faster_than' do
