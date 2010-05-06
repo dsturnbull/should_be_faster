@@ -1,23 +1,10 @@
 require 'benchmark'
 require 'spec'
 require 'spec/matchers'
+require 'spec/matchers/be'
 
 def _benchmark(code, iter)
   Benchmark.measure { iter.times { code.call } }
-end
-
-Spec::Matchers.define(:be_faster_than) do |rhs_code, options|
-  options ||= {}
-  options[:matcher] = self
-  options[:faster]  = true
-  Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
-end
-
-Spec::Matchers.define(:be_slower_than) do |rhs_code, options|
-  options ||= {}
-  options[:matcher] = self
-  options[:faster]  = false
-  Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
 end
 
 module Spec
@@ -28,7 +15,7 @@ module Spec
         @options  = options
         @options[:iterations] ||= 100
         @options[:factor]     ||= 1
-        @options[:faster]       = @options[:faster] ? true : false  # I hate ||= not working with booleans
+        @options[:faster]       = @options[:faster]
       end
 
       def benchmark_comparison
@@ -76,7 +63,7 @@ module Spec
       end
     end
 
-    class BePredicate < Be
+    module BeFasterThan
       def times
         @factor = @args[0]
         self
@@ -102,5 +89,24 @@ module Spec
         end
       end
     end
+
   end
 end
+
+Spec::Matchers::BePredicate.send(:include, Spec::Matchers::BeFasterThan)
+Spec::Matchers::BeSameAs.send(:include, Spec::Matchers::BeFasterThan)
+
+Spec::Matchers.define(:be_faster_than) do |rhs_code, options|
+  options ||= {}
+  options[:matcher] = self
+  options[:faster]  = true
+  Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
+end
+
+Spec::Matchers.define(:be_slower_than) do |rhs_code, options|
+  options ||= {}
+  options[:matcher] = self
+  options[:faster]  = false
+  Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
+end
+
