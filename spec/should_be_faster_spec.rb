@@ -6,7 +6,7 @@ describe 'should_be_faster' do
     options.stub!(:[]).and_return(nil)
     options.stub!(:[]=)
     options.should_receive(:[]=).with(:iterations, 100)
-    Spec::Matchers::BenchmarkComparison.new(nil, options)
+    RSpec::Matchers::BenchmarkComparison.new(nil, options)
   end
 
   context 'with an options hash' do
@@ -15,7 +15,7 @@ describe 'should_be_faster' do
       options.stub!(:[])
       options.stub!(:[]=)
       options.stub!(:[]).with(:iterations).and_return(20)
-      Spec::Matchers::BenchmarkComparison.new(nil, options)
+      RSpec::Matchers::BenchmarkComparison.new(nil, options)
       options[:iterations].should == 20
     end
 
@@ -24,7 +24,7 @@ describe 'should_be_faster' do
       options.stub!(:[])
       options.stub!(:[]=)
       options.stub!(:[]).with(:factor).and_return(20)
-      Spec::Matchers::BenchmarkComparison.new(nil, options)
+      RSpec::Matchers::BenchmarkComparison.new(nil, options)
       options[:factor].should == 20
     end
   end

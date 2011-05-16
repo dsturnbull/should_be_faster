@@ -1,13 +1,13 @@
 require 'benchmark'
-require 'spec'
-require 'spec/matchers'
-require 'spec/matchers/be'
+require 'rspec'
+require 'rspec/matchers'
+require 'rspec/matchers/be'
 
 def _benchmark(code, iter)
   Benchmark.measure { iter.times { code.call } }
 end
 
-module Spec
+module RSpec
   module Matchers
     class BenchmarkComparison
       def initialize(rhs_code, options={})
@@ -64,8 +64,8 @@ module Spec
     end
 
     module BeFasterThan
-      def times
-        @factor = @args[0]
+      def times(*args)
+        @factor = args[0]
         self
       end
 
@@ -75,7 +75,7 @@ module Spec
         Matcher.new(:faster_than) do
           options[:faster]  = true
           options[:matcher] = self
-          Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
+          RSpec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
         end
       end
 
@@ -85,7 +85,7 @@ module Spec
         Matcher.new(:slower_than) do
           options[:faster]  = false
           options[:matcher] = self
-          Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
+          RSpec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
         end
       end
     end
@@ -93,20 +93,21 @@ module Spec
   end
 end
 
-Spec::Matchers::BePredicate.send(:include, Spec::Matchers::BeFasterThan)
-Spec::Matchers::BeSameAs.send(:include, Spec::Matchers::BeFasterThan)
+RSpec::Matchers::BePredicate.send(:include, RSpec::Matchers::BeFasterThan)
+RSpec::Matchers::BeComparedTo.send(:include, RSpec::Matchers::BeFasterThan)
+RSpec::Matchers::Matcher.send(:include, RSpec::Matchers::BeFasterThan)
 
-Spec::Matchers.define(:be_faster_than) do |rhs_code, options|
+RSpec::Matchers.define(:be_faster_than) do |rhs_code, options|
   options ||= {}
   options[:matcher] = self
   options[:faster]  = true
-  Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
+  RSpec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
 end
 
-Spec::Matchers.define(:be_slower_than) do |rhs_code, options|
+RSpec::Matchers.define(:be_slower_than) do |rhs_code, options|
   options ||= {}
   options[:matcher] = self
   options[:faster]  = false
-  Spec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
+  RSpec::Matchers::BenchmarkComparison.new(rhs_code, options).benchmark_comparison
 end
 
